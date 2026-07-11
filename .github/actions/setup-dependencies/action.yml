@@ -72,7 +72,7 @@ runs:
         echo "CMAKE_CXX_COMPILER_LAUNCHER=$CCACHE_VARIANT" >> "$GITHUB_ENV"
 
     - name: Install Qt
-      if: ${{ inputs.msystem == '' }}
+      if: ${{ inputs.msystem == '' && runner.os != 'Windows' }}
       uses: jurplel/install-qt-action@v4
       with:
         aqtversion: "==3.1.*"

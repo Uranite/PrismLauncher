@@ -25,6 +25,22 @@
         "zstd"
       ]
     },
+    {
+      "name": "qtbase",
+      "platform": "windows"
+    },
+    {
+      "name": "qtsvg",
+      "platform": "windows"
+    },
+    {
+      "name": "qtimageformats",
+      "platform": "windows"
+    },
+    {
+      "name": "qtnetworkauth",
+      "platform": "windows"
+    },
     "tomlplusplus",
     "zlib"
   ]

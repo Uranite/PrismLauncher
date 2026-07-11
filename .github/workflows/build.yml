@@ -71,14 +71,14 @@ jobs:
             # TODO(@getchoo): This is the default in setup-dependencies/windows. Why isn't it working?!?!
             vcvars-arch: amd64
             qt-version: 6.10.2
-            vcpkg-triplet: x64-windows-static-md
+            vcpkg-triplet: x64-windows-static
 
           - os: windows-11-arm
             artifact-name: Windows-MSVC-arm64
             cmake-preset: windows_msvc
             vcvars-arch: arm64
             qt-version: 6.10.2
-            vcpkg-triplet: arm64-windows-static-md
+            vcpkg-triplet: arm64-windows-static
 
           - os: macos-26
             artifact-name: macOS
@@ -127,9 +127,13 @@ jobs:
       - name: Configure project
         run: |
           if [ -n "${{ matrix.vcpkg-triplet }}" ]; then
-            cmake --preset "$CMAKE_PRESET" -DVCPKG_TARGET_TRIPLET="${{ matrix.vcpkg-triplet }}" -DVCPKG_HOST_TRIPLET="${{ matrix.vcpkg-triplet }}"
+            cmake --preset "$CMAKE_PRESET" \
+              -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>" \
+              -DVCPKG_TARGET_TRIPLET="${{ matrix.vcpkg-triplet }}" \
+              -DVCPKG_HOST_TRIPLET="${{ matrix.vcpkg-triplet }}"
           else
-            cmake --preset "$CMAKE_PRESET"
+            cmake --preset "$CMAKE_PRESET" \
+              -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>"
           fi
 
       - name: Run build
