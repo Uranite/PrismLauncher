@@ -1505,22 +1505,25 @@ if(WIN32 OR (UNIX AND APPLE))
         set(QT_DEPLOY_TOOL_OPTIONS "--no-opengl-sw --no-quick-import --no-system-d3d-compiler --no-system-dxc-compiler --skip-plugin-types generic,networkinformation")
     endif()
 
-    qt_generate_deploy_script(
-        TARGET ${Launcher_Name}
-        OUTPUT_SCRIPT QT_DEPLOY_SCRIPT
-        CONTENT "
-        qt_deploy_runtime_dependencies(
-            EXECUTABLE ${BINARY_DEST_DIR}/$<TARGET_FILE_NAME:${Launcher_Name}>
-            BIN_DIR ${BINARY_DEST_DIR}
-            LIBEXEC_DIR ${LIBRARY_DEST_DIR}
-            LIB_DIR ${LIBRARY_DEST_DIR}
-            PLUGINS_DIR ${PLUGIN_DEST_DIR}
-            NO_OVERWRITE
-            NO_TRANSLATIONS
-            NO_COMPILER_RUNTIME
-            DEPLOY_TOOL_OPTIONS ${QT_DEPLOY_TOOL_OPTIONS}
-        )"
-    )
+    get_target_property(QT_CORE_TYPE Qt6::Core TYPE)
+    if(NOT QT_CORE_TYPE STREQUAL "STATIC_LIBRARY")
+        qt_generate_deploy_script(
+            TARGET ${Launcher_Name}
+            OUTPUT_SCRIPT QT_DEPLOY_SCRIPT
+            CONTENT "
+            qt_deploy_runtime_dependencies(
+                EXECUTABLE ${BINARY_DEST_DIR}/$<TARGET_FILE_NAME:${Launcher_Name}>
+                BIN_DIR ${BINARY_DEST_DIR}
+                LIBEXEC_DIR ${LIBRARY_DEST_DIR}
+                LIB_DIR ${LIBRARY_DEST_DIR}
+                PLUGINS_DIR ${PLUGIN_DEST_DIR}
+                NO_OVERWRITE
+                NO_TRANSLATIONS
+                NO_COMPILER_RUNTIME
+                DEPLOY_TOOL_OPTIONS ${QT_DEPLOY_TOOL_OPTIONS}
+            )"
+        )
+    endif()
 
     # Bundle our linked dependencies
     install(
@@ -1542,10 +1545,12 @@ if(WIN32 OR (UNIX AND APPLE))
         FRAMEWORK DESTINATION ${FRAMEWORK_DEST_DIR}
     )
     # Deploy Qt plugins
-    install(
-        SCRIPT ${QT_DEPLOY_SCRIPT}
-        COMPONENT bundle
-    )
+    if(NOT QT_CORE_TYPE STREQUAL "STATIC_LIBRARY")
+        install(
+            SCRIPT ${QT_DEPLOY_SCRIPT}
+            COMPONENT bundle
+        )
+    endif()
     # FIXME: remove this crap once we stop using msys2
     if(MINGW)
         # i've not found a solution better than injecting the config vars like this...
