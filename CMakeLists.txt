@@ -55,6 +55,10 @@ if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
         # /MANIFEST:NO disables generating a manifest file, we instead provide our own
         # /STACK sets the stack reserve size, ATL's pack list needs 3-4 MiB as of November 2022, provide 8 MiB
         "$<$<COMPILE_LANGUAGE:C,CXX>:/LTCG;/MANIFEST:NO;/STACK:8388608>"
+        # Workarounds for Qt6 static linking bugs on Windows
+        "/FORCE:MULTIPLE"
+        "$<$<CONFIG:Release,RelWithDebInfo>:/NODEFAULTLIB:LIBCMTD>"
+        "$<$<CONFIG:Debug>:/NODEFAULTLIB:LIBCMT>"
     )
 
     # /GL enables whole program optimizations
