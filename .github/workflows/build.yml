@@ -128,13 +128,11 @@ jobs:
         run: |
           if [ -n "${{ matrix.vcpkg-triplet }}" ]; then
             cmake --preset "$CMAKE_PRESET" \
-              -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
               -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>" \
               -DVCPKG_TARGET_TRIPLET="${{ matrix.vcpkg-triplet }}" \
               -DVCPKG_HOST_TRIPLET="${{ matrix.vcpkg-triplet }}"
           else
-            cmake --preset "$CMAKE_PRESET" \
-              -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+            cmake --preset "$CMAKE_PRESET"
           fi
 
       - name: Run build

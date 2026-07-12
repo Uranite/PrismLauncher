@@ -377,14 +377,14 @@ Section "@Launcher_DisplayName@"
   File "@Launcher_APP_BINARY_NAME@.exe"
   File "@Launcher_APP_BINARY_NAME@_filelink.exe"
   File "@Launcher_APP_BINARY_NAME@_updater.exe"
-  File "qt.conf"
-  File "qtlogging.ini"
-  File *.dll
-  File /r "iconengines"
-  File /r "imageformats"
-  File /r "jars"
-  File /r "platforms"
-  File /r "styles"
+  File /nonfatal "qt.conf"
+  File /nonfatal "qtlogging.ini"
+  File /nonfatal *.dll
+  File /nonfatal /r "iconengines"
+  File /nonfatal /r "imageformats"
+  File /nonfatal /r "jars"
+  File /nonfatal /r "platforms"
+  File /nonfatal /r "styles"
   File /nonfatal /r "tls"
 
   ; Write the installation path into the registry
