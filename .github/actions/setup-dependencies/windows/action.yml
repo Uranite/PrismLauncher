@@ -33,6 +33,10 @@ runs:
         distribution: zulu
         java-version: 17
 
+    - name: Install NSIS
+      if: ${{ runner.os == 'Windows' }}
+      uses: negrutiu/nsis-install@v2
+
     - name: Setup vcpkg cache (MSVC)
       if: ${{ inputs.msystem == '' }}
       shell: pwsh
